@@ -1,0 +1,23 @@
+// prisma/schema.prisma
+//목적	명령어	설명
+// 테이블 추가/삭제 적용	npx prisma migrate dev --name 이름	schema.prisma에서 테이블을 추가/삭제한 후 DB에 실제 반영
+// 기존 DB에 강제로 반영 (초기화 X)	npx prisma db push	마이그레이션 파일 없이 강제로 스키마만 동기화 (개발 중 테스트용으로만 사용 권장)
+// DB 완전 초기화 (모든 데이터 삭제)	npx prisma migrate reset	전체 마이그레이션 다시 실행 + 테이블 전부 삭제 후 재생성
+
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("POSTGRES_URI")
+}
+
+model User {
+  id        Int      @id @default(autoincrement()) // 기본 키
+  email     String   @unique                      // 이메일 (중복 X)
+  nickname  String                                // 닉네임
+  password  String                                // 해싱된 비밀번호
+  createdAt DateTime @default(now())              // 생성일자
+}
